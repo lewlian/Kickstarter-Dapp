@@ -20,3 +20,9 @@ To start up development server with nextJs on localhost:3000
 ```
 npm run dev
 ```
+
+For running test
+
+```
+npm run test
+```
