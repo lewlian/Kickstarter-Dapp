@@ -4,7 +4,7 @@ const compiledFactory = require('./build/CampaignFactory.json');
 
 //set up hdwallerprovider
 const provider = new HDWalletProvider(
-  'mail awesome argue machine other festival unhappy satisfy ocean screen elephant face',
+  'fffff',
   'https://rinkeby.infura.io/v3/760d7935886041a7b786651bb3a863ce'
 );
 
