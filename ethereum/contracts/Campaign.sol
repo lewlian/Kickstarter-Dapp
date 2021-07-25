@@ -31,10 +31,11 @@ contract Campaign {
     address public manager;
     uint public minimumContribution;
     uint public approversCount;
+    string public campaignTitle;
+    string public campaignDescription;
     //this approvers here is basically contributers not for a specifc request
     mapping(address=>bool) public approvers;
-    string campaignTitle;
-    string campaignDescription;
+    
     
    
     modifier restricted() {

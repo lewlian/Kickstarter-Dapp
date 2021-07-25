@@ -3,11 +3,14 @@ import { Card, Button } from 'semantic-ui-react';
 import factory from '../ethereum/factory';
 import Layout from '../component/Layout';
 import { Link } from '../routes';
-
+import Campaign from '../ethereum/campaign';
 class CampaignIndex extends Component {
   // function is not assigned to instances of the class but to the class itself
   static async getInitialProps() {
     const campaigns = await factory.methods.getDeployedCampaigns().call();
+    console.log(campaigns);
+    const title = await Campaign(campaigns[0]).methods.campaignTitle().call();
+    console.log(title);
     //pass the data as a prop to the component
     return { campaigns: campaigns };
   }

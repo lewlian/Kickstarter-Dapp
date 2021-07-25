@@ -4,7 +4,7 @@ const compiledFactory = require('./build/CampaignFactory.json');
 
 //set up hdwallerprovider
 const provider = new HDWalletProvider(
-  'add if needed',
+  'mail awesome argue machine other festival unhappy satisfy ocean screen elephant face',
   'https://rinkeby.infura.io/v3/760d7935886041a7b786651bb3a863ce'
 );
 
@@ -21,7 +21,7 @@ const deploy = async () => {
     JSON.parse(compiledFactory.interface)
   )
     .deploy({ data: compiledFactory.bytecode })
-    .send({ gas: '1000000', from: accounts[0] });
+    .send({ gas: '2000000', from: accounts[0] });
 
   console.log('Contract deployed to', result.options.address);
 };
