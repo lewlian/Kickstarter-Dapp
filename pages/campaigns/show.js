@@ -1,19 +1,16 @@
-import React, { Component } from 'react';
-import { Card, Container, Grid, Button } from 'semantic-ui-react';
-import Layout from '../../component/Layout';
-import Campaign from '../../ethereum/campaign';
-import web3 from '../../ethereum/web3';
-import ContributeForm from '../../component/ContributeForm';
-import { Link } from '../../routes';
+import React, { Component } from "react";
+import { Button, Card, Grid } from "semantic-ui-react";
+import ContributeForm from "../../component/ContributeForm";
+import Layout from "../../component/Layout";
+import Campaign from "../../ethereum/campaign";
+import web3 from "../../ethereum/web3";
+import { Link } from "../../routes";
 
 class CampaignShow extends Component {
   static async getInitialProps(props) {
     const campaign = Campaign(props.query.address);
-    console.log(campaign);
-
     const summary = await campaign.methods.getSummary().call();
-
-    console.log(summary);
+    // console.log(summary);
     //pass the data as a prop to the component
     return {
       address: props.query.address,
@@ -23,7 +20,7 @@ class CampaignShow extends Component {
       approversCount: summary[3],
       manager: summary[4],
       title: summary[5],
-      description: summary[6],
+      description: summary[6]
     };
   }
 
@@ -35,55 +32,55 @@ class CampaignShow extends Component {
       requestsCount,
       approversCount,
       title,
-      description,
+      description
     } = this.props;
     const items = [
       {
         header: title,
-        meta: 'Title of Campaign',
-        description: 'Title of the Campaign',
-        style: { overflowWrap: 'break-word' },
+        meta: "Campaign Title",
+        // description: "Title of the Campaign",
+        style: { overflowWrap: "break-word" }
       },
       {
         header: description,
-        meta: 'Campaign Description',
-        description: 'Summarizes and describes the objective of the campaign',
-        style: { overflowWrap: 'break-word' },
+        meta: "Campaign Description",
+        description: "Summarizes and describes the objective of the campaign",
+        style: { overflowWrap: "break-word" }
       },
       {
         header: manager,
-        meta: 'Address of Manager',
+        meta: "Address of Manager",
         description:
-          'The manager created this campaign and can create requests to withdraw money',
-        style: { overflowWrap: 'break-word' },
+          "The manager created this campaign and can create requests to withdraw money",
+        style: { overflowWrap: "break-word" }
       },
       {
-        header: minimumContribution,
-        meta: 'Minimum Contribution (wei)',
+        header: web3.utils.fromWei(minimumContribution, "ether"),
+        meta: "Minimum Contribution (ether)",
         description:
-          'You must contribute at least this much wei to become an approver',
-        style: { overflowWrap: 'break-word' },
+          "You must contribute at least this much ether to become an approver",
+        style: { overflowWrap: "break-word" }
       },
       {
         header: requestsCount,
-        meta: 'Number of Requests',
+        meta: "Number of Requests",
         description:
-          'A requests tries to withdraw money from the contract. Requests must be approved by majority approvers',
-        style: { overflowWrap: 'break-word' },
+          "Requests are made to withdraw money from the contract. Requests must be approved by a majority of approvers",
+        style: { overflowWrap: "break-word" }
       },
       {
         header: approversCount,
-        meta: 'Number of Approvers',
+        meta: "Number of Approvers",
         description:
-          'Number of people who have donated to campaign with minimum requirement',
-        style: { overflowWrap: 'break-word' },
+          "Number of people who have donated to campaign with minimum requirement",
+        style: { overflowWrap: "break-word" }
       },
       {
-        header: web3.utils.fromWei(balance, 'ether'),
-        meta: 'Campaign Balance (ether)',
-        description: 'How much money this campaign have left to spend',
-        style: { overflowWrap: 'break-word' },
-      },
+        header: web3.utils.fromWei(balance, "ether"),
+        meta: "Campaign Balance (ether)",
+        description: "Remaining funds that the campaign has left to spend",
+        style: { overflowWrap: "break-word" }
+      }
     ];
     return <Card.Group items={items} />;
   }
@@ -91,22 +88,24 @@ class CampaignShow extends Component {
   render() {
     return (
       <Layout>
-        <h3>Campaign Show</h3>
+        <h3 style={{ margin: "32px 0", fontSize: 20 }}>Campaign Details</h3>
+
         <Grid>
           <Grid.Row>
             <Grid.Column width={10}>{this.renderCards()}</Grid.Column>
 
             <Grid.Column width={6}>
-              <ContributeForm address={this.props.address} />
+              <ContributeForm
+                address={this.props.address}
+                manager={this.props.manager}
+              />
             </Grid.Column>
           </Grid.Row>
 
           <Grid.Row>
             <Grid.Column>
               <Link route={`/campaigns/${this.props.address}/requests`}>
-                <a>
-                  <Button primary>View Requests</Button>
-                </a>
+                <Button content="View Requests" color="purple" />
               </Link>
             </Grid.Column>
           </Grid.Row>

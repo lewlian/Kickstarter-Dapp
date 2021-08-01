@@ -1,38 +1,39 @@
-import React, { Component } from 'react';
-import { Form, Button, Input, Message } from 'semantic-ui-react';
-import Layout from '../../component/Layout';
-import factory from '../../ethereum/factory';
-import web3 from '../../ethereum/web3';
-import { Router } from '../../routes';
+import React, { Component } from "react";
+import { Button, Form, Input, Message } from "semantic-ui-react";
+import Layout from "../../component/Layout";
+import factory from "../../ethereum/factory";
+import web3 from "../../ethereum/web3";
+import { Router } from "../../routes";
 
 class CampaignNew extends Component {
   state = {
-    minimumContribution: '',
-    errorMessage: '',
+    minimumContribution: "",
+    errorMessage: "",
     loading: false,
-    title: '',
-    description: '',
+    title: "",
+    description: ""
   };
 
   onSubmit = async (event) => {
     //keep the browser from attempting to sub it the form
     event.preventDefault();
-    this.setState({ loading: true, errorMessage: '' });
+    this.setState({ loading: true, errorMessage: "" });
 
     //capture case when there are any error in the transaction
     try {
       const accounts = await web3.eth.getAccounts();
       //make use of metamask to calculate gas
+
       await factory.methods
         .createCampaign(
-          this.state.minimumContribution,
+          web3.utils.toWei(this.state.minimumContribution, "ether"),
           this.state.title,
           this.state.description
         )
         .send({
-          from: accounts[0],
+          from: accounts[0]
         });
-      Router.pushRoute('/');
+      Router.pushRoute("/");
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
@@ -42,24 +43,26 @@ class CampaignNew extends Component {
   render() {
     return (
       <Layout>
-        <h3>Create a Campaign</h3>
+        <h3 style={{ margin: "32px 0", fontSize: 20 }}>Create a Campaign</h3>
+
         <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
           <Form.Field>
             <label>Minimum Contribution</label>
             <Input
-              label='wei'
-              labelPosition='right'
+              label="ether"
+              labelPosition="right"
+              type="number"
               value={this.state.minimumContribution}
               onChange={(event) =>
                 this.setState({ minimumContribution: event.target.value })
               }
             />
-            <label>Title of Campaign</label>
+            <label style={{ marginTop: "8px" }}>Title of Campaign</label>
             <Input
               value={this.state.title}
               onChange={(event) => this.setState({ title: event.target.value })}
             />
-            <label>Description of Campaign</label>
+            <label style={{ marginTop: "8px" }}>Description of Campaign</label>
             <Input
               value={this.state.description}
               onChange={(event) =>
@@ -67,10 +70,12 @@ class CampaignNew extends Component {
               }
             />
           </Form.Field>
-          <Message error header='Oops!' content={this.state.errorMessage} />
-          <Button loading={this.state.loading} primary>
-            Create!
-          </Button>
+          <Message error header="Oops!" content={this.state.errorMessage} />
+          <Button
+            loading={this.state.loading}
+            content="Create!"
+            color="purple"
+          />
         </Form>
       </Layout>
     );

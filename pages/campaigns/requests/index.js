@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Button, Table } from 'semantic-ui-react';
-import { Link } from '../../../routes';
-import Layout from '../../../component/Layout';
-import Campaign from '../../../ethereum/campaign';
-import RequestRow from '../../../component/RequestRow';
+import React, { Component } from "react";
+import { Button, Table } from "semantic-ui-react";
+import Layout from "../../../component/Layout";
+import RequestRow from "../../../component/RequestRow";
+import Campaign from "../../../ethereum/campaign";
+import { Link } from "../../../routes";
 
 class RequestIndex extends Component {
   //initial call
@@ -12,6 +12,8 @@ class RequestIndex extends Component {
     const campaign = Campaign(address);
     const requestCount = await campaign.methods.getRequestsCount().call();
     const approversCount = await campaign.methods.approversCount().call();
+    const manager = await campaign.methods.manager().call();
+
     const requests = await Promise.all(
       Array(parseInt(requestCount))
         .fill()
@@ -19,7 +21,7 @@ class RequestIndex extends Component {
           return campaign.methods.requests(index).call();
         })
     );
-    return { address, requests, requestCount, approversCount };
+    return { address, requests, requestCount, approversCount, manager };
   }
 
   //helper method to rendorrow
@@ -32,6 +34,7 @@ class RequestIndex extends Component {
           id={index}
           address={this.props.address}
           approversCount={this.props.approversCount}
+          manager={this.props.manager}
         />
       );
     });
@@ -41,12 +44,16 @@ class RequestIndex extends Component {
 
     return (
       <Layout>
-        <h3>Request list</h3>
+        <h3 style={{ margin: "32px 0 0 0", fontSize: 20 }}>Request list</h3>
+
         <Link route={`/campaigns/${this.props.address}/requests/new`}>
           <a>
-            <Button primary floated='right' style={{ marginBottom: 10 }}>
-              Add Request
-            </Button>
+            <Button
+              content="Add Request"
+              color="purple"
+              floated="right"
+              style={{ marginBottom: 10 }}
+            />
           </a>
         </Link>
         <Table>
@@ -63,7 +70,10 @@ class RequestIndex extends Component {
           </Header>
           <Body>{this.renderRows()}</Body>
         </Table>
-        <div>Found {this.props.requestCount} requests</div>
+        <div>
+          Found {this.props.requestCount}{" "}
+          {this.props.requestCount === 1 ? "request" : "requests"}
+        </div>
       </Layout>
     );
   }

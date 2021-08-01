@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { Form, Button, Message, Input } from 'semantic-ui-react';
-import Campaign from '../../../ethereum/campaign';
-import web3 from '../../../ethereum/web3';
-import { Link, Router } from '../../../routes';
-import Layout from '../../../component/Layout';
+import React, { Component } from "react";
+import { Button, Form, Input, Message } from "semantic-ui-react";
+import Layout from "../../../component/Layout";
+import Campaign from "../../../ethereum/campaign";
+import web3 from "../../../ethereum/web3";
+import { Link, Router } from "../../../routes";
 
 class RequestNew extends Component {
   state = {
-    value: '',
-    description: '',
-    receipientAddress: '',
+    value: "",
+    description: "",
+    receipientAddress: "",
     loading: false,
-    errorMessage: '',
+    errorMessage: ""
   };
   static async getInitialProps(props) {
     const { address } = props.query;
@@ -19,10 +19,10 @@ class RequestNew extends Component {
   }
 
   onSubmit = async (event) => {
-    console.log('test');
+    console.log("test");
     event.preventDefault();
 
-    this.setState({ loading: true, errorMessage: '' });
+    this.setState({ loading: true, errorMessage: "" });
     const campaign = Campaign(this.props.address);
 
     const { description, value, receipientAddress } = this.state;
@@ -33,7 +33,7 @@ class RequestNew extends Component {
       await campaign.methods
         .createRequest(
           description,
-          web3.utils.toWei(value, 'ether'),
+          web3.utils.toWei(value, "ether"),
           receipientAddress
         )
         .send({ from: accounts[0] });
@@ -67,6 +67,7 @@ class RequestNew extends Component {
             <label>Value in Ether</label>
             <Input
               value={this.state.value}
+              type="number"
               onChange={(event) => this.setState({ value: event.target.value })}
             />
           </Form.Field>
@@ -79,10 +80,12 @@ class RequestNew extends Component {
               }
             />
           </Form.Field>
-          <Message error header='Oops!' content={this.state.errorMessage} />
-          <Button primary loading={this.state.loading}>
-            Create!
-          </Button>
+          <Message error header="Oops!" content={this.state.errorMessage} />
+          <Button
+            content="Create!"
+            color="purple"
+            loading={this.state.loading}
+          />
         </Form>
       </Layout>
     );

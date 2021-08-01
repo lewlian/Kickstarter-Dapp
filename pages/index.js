@@ -1,52 +1,96 @@
-import React, { Component } from 'react';
-import { Card, Button } from 'semantic-ui-react';
-import factory from '../ethereum/factory';
-import Layout from '../component/Layout';
-import { Link } from '../routes';
-import Campaign from '../ethereum/campaign';
+import React, { Component } from "react";
+import { Card, Grid, Image } from "semantic-ui-react";
+import Layout from "../component/Layout";
+import Campaign from "../ethereum/campaign";
+import factory from "../ethereum/factory";
+import { Link } from "../routes";
 class CampaignIndex extends Component {
-  // function is not assigned to instances of the class but to the class itself
   static async getInitialProps() {
-    const campaigns = await factory.methods.getDeployedCampaigns().call();
-    console.log(campaigns);
-    const title = await Campaign(campaigns[0]).methods.campaignTitle().call();
-    console.log(title);
-    //pass the data as a prop to the component
+    let campaigns = await factory.methods.getDeployedCampaigns().call();
+    const promise = campaigns.map(async (item) => {
+      // const title = await Campaign(item).methods.campaignTitle().call();
+      // const description = await Campaign(item)
+      //   .methods.campaignDescription()
+      //   .call();
+
+      const summary = await Campaign(item).methods.getSummary().call();
+      // minimumContribution: summary[0],
+      // balance: summary[1],
+      // const requestsCount = summary[2];
+      const approversCount = summary[3];
+      const manager = summary[4];
+      const title = summary[5];
+      const description = summary[6];
+
+      const body = {};
+      body.campaignAddress = item;
+      body.approversCount = approversCount;
+      body.manager = manager;
+      body.title = title;
+      body.description = description;
+      return body;
+    });
+    campaigns = await Promise.all(promise);
     return { campaigns: campaigns };
   }
 
   renderCampaigns() {
-    const items = this.props.campaigns.map((address) => {
-      return {
-        header: address,
-        description: (
-          <Link route={`/campaigns/${address}`}>
-            <a>View Campaign</a>
-          </Link>
-        ),
-        fluid: true,
-      };
-    });
+    const list = this.props.campaigns.map((item) => (
+      <Card fluid>
+        <Card.Content header={item.title} />
+        <Card.Content>
+          <p style={{ fontSize: "16px" }}>{item.description}</p>
 
-    return <Card.Group items={items} />;
+          <p style={{ color: "purple", marginTop: "8px" }}>
+            {item.approversCount} people have donated to this campaign
+          </p>
+          <p style={{ fontSize: "12px", color: "#383838" }}>
+            Campaign address: {item.campaignAddress}
+          </p>
+          <p style={{ fontSize: "12px", color: "#383838" }}>
+            Owner: {item.manager}
+          </p>
+        </Card.Content>
+
+        <Card.Content>
+          <Link route={`/campaigns/${item.campaignAddress}`}>
+            <a style={{ color: "purple", fontWeight: "bold" }}>View Campaign</a>
+          </Link>
+        </Card.Content>
+      </Card>
+    ));
+
+    return list;
   }
 
   render() {
     return (
       <Layout>
         <div>
-          <h3>Open Campaigns</h3>
-          <Link route='/campaigns/new'>
-            <a>
-              <Button
-                floated='right'
-                content='Create Campaign'
-                icon='add circle'
-                primary
+          <h3 style={{ margin: "32px 0", fontSize: 20 }}>Open Campaigns</h3>
+
+          <Grid stackable columns={2}>
+            <Grid.Column>{this.renderCampaigns()}</Grid.Column>
+            <Grid.Column>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSize: 20,
+                  marginTop: "16px",
+                  marginBottom: "16px"
+                }}
+              >
+                We are IdeaFi. The safest way to support creative projects.
+              </h1>
+              <Image
+                style={{
+                  margin: "56px",
+                  marginTop: 0
+                }}
+                src="/homepage.svg"
               />
-            </a>
-          </Link>
-          {this.renderCampaigns()}
+            </Grid.Column>
+          </Grid>
         </div>
       </Layout>
     );
