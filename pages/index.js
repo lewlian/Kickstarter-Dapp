@@ -35,14 +35,17 @@ class CampaignIndex extends Component {
   }
 
   renderCampaigns() {
-    const list = this.props.campaigns.map((item) => (
-      <Card fluid>
+    const list = this.props.campaigns.map((item, i) => (
+      <Card fluid key={i}>
         <Card.Content header={item.title} />
         <Card.Content>
           <p style={{ fontSize: "16px" }}>{item.description}</p>
 
           <p style={{ color: "purple", marginTop: "8px" }}>
-            {item.approversCount} people have donated to this campaign
+            {item.approversCount}{" "}
+            {item.approversCount == 1 ? "person" : "people"}{" "}
+            {item.approversCount == 1 ? "has" : "have"} contributed to this
+            campaign
           </p>
           <p style={{ fontSize: "12px", color: "#383838" }}>
             Campaign address: {item.campaignAddress}

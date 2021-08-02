@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Button, Form, Input, Message } from "semantic-ui-react";
 import Campaign from "../ethereum/campaign";
 import web3 from "../ethereum/web3";
-import { Router } from "../routes";
 
 class ContributeForm extends Component {
   state = {
@@ -32,8 +31,8 @@ class ContributeForm extends Component {
         from: accounts[0],
         value: web3.utils.toWei(this.state.value, "ether")
       });
-      //refreshes the page in place, don't use .push for this purpose
-      Router.replaceRoute(`/campaigns/${this.props.address}`);
+      location.reload();
+      return false;
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
@@ -43,6 +42,7 @@ class ContributeForm extends Component {
 
   render() {
     const isManager = this.state.walletAddress === this.props.manager;
+    const isApprover = this.props.isApprover;
 
     return (
       <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
@@ -54,7 +54,7 @@ class ContributeForm extends Component {
             type="number"
             label="ether"
             labelPosition="right"
-            disabled={isManager}
+            disabled={isManager || isApprover}
           />
         </Form.Field>
         <Message error header="Oops!" content={this.state.errorMessage} />
@@ -64,7 +64,15 @@ class ContributeForm extends Component {
               color: "red"
             }}
           >
-            Managers cannot donate to their own campaigns
+            Managers cannot contribute to their own campaigns
+          </b>
+        ) : isApprover ? (
+          <b
+            style={{
+              color: "red"
+            }}
+          >
+            You have already contributed to this campaign
           </b>
         ) : (
           <Button
