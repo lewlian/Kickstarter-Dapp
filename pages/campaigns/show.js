@@ -71,19 +71,19 @@ class CampaignShow extends Component {
         header: web3.utils.fromWei(minimumContribution, 'ether'),
         meta: 'Minimum Contribution (ether)',
         description:
-          'You must contribute at least this much ether to become an approver',
+          'You must contribute at least this much ether to become a contributor',
         style: { overflowWrap: 'break-word' }
       },
       {
         header: requestsCount,
         meta: 'Number of Requests',
         description:
-          'Requests are made to withdraw money from the contract. Requests must be approved by a majority of approvers',
+          'Requests are made to withdraw money from the contract. Requests must be approved by a majority of contributors',
         style: { overflowWrap: 'break-word' }
       },
       {
         header: approversCount,
-        meta: 'Number of Approvers',
+        meta: 'Number of Contributers',
         description:
           'Number of people who have contributed to campaign with minimum requirement',
         style: { overflowWrap: 'break-word' }
