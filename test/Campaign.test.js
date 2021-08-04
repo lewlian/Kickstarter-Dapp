@@ -47,7 +47,7 @@ describe('Campaigns', () => {
   it('allows contributers and add them as approvers', async () => {
     await campaign.methods.contribute().send({
       value: '200',
-      from: accounts[1],
+      from: accounts[1]
     });
 
     //look up a single value in the approval variable and see if true is returned
@@ -73,7 +73,7 @@ describe('Campaigns', () => {
       .createRequest('Buy batteries', '100', accounts[1])
       .send({
         from: accounts[0],
-        gas: '1000000',
+        gas: '1000000'
       });
 
     const request = await campaign.methods.requests(0).call();
@@ -83,10 +83,10 @@ describe('Campaigns', () => {
   it('processes requests', async () => {
     await campaign.methods.contribute().send({
       from: accounts[0],
-      value: web3.utils.toWei('10', 'ether'),
+      value: web3.utils.toWei('10', 'ether')
     });
 
-    //send 5 ether to the vendor/supplier as the manager
+    //send 5 ether to the recipient(vendor/supplier) as the manager
     await campaign.methods
       .createRequest(
         'Buy batteries',
@@ -95,17 +95,17 @@ describe('Campaigns', () => {
       )
       .send({
         from: accounts[0],
-        gas: '1000000',
+        gas: '1000000'
       });
 
     await campaign.methods.approveRequest(0).send({
       from: accounts[0],
-      gas: '1000000',
+      gas: '1000000'
     });
 
     await campaign.methods.finalizeRequest(0).send({
       from: accounts[0],
-      gas: '1000000',
+      gas: '1000000'
     });
 
     //check that the request complete flag is changed to boolean
@@ -113,7 +113,7 @@ describe('Campaigns', () => {
     assert(request.complete);
 
     // ganache accounts might have varying balances from every test run
-    // check that the supplier/vendor received the ether transfer from finalize request
+    // check that the recipient(supplier/vendor) received the ether transfer from finalize request
     let balance = await web3.eth.getBalance(accounts[1]);
     balance = web3.utils.fromWei(balance, 'ether');
     balance = parseFloat(balance);

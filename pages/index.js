@@ -51,7 +51,7 @@ class CampaignIndex extends Component {
             Campaign address: {item.campaignAddress}
           </p>
           <p style={{ fontSize: "12px", color: "#383838" }}>
-            Owner: {item.manager}
+            Manager: {item.manager}
           </p>
         </Card.Content>
 
@@ -83,7 +83,7 @@ class CampaignIndex extends Component {
                   marginBottom: "16px"
                 }}
               >
-                We are IdeaFi. The safest way to support creative projects.
+                We are IdeaFi. The safest way to support creative campaigns.
               </h1>
               <Image
                 style={{
