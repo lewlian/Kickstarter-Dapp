@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Card, Grid } from 'semantic-ui-react';
-import ContributeForm from '../../component/ContributeForm';
-import Layout from '../../component/Layout';
-import Campaign from '../../ethereum/campaign';
-import web3 from '../../ethereum/web3';
-import { Link } from '../../routes';
+import ContributeForm from '../../../component/ContributeForm';
+import Layout from '../../../component/Layout';
+import Campaign from '../../../ethereum/campaign';
+import web3 from '../../../ethereum/web3';
+import { Link } from '../../../routes';
 
 class CampaignShow extends Component {
   state = {

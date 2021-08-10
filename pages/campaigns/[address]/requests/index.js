@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Button, Table } from "semantic-ui-react";
-import Layout from "../../../component/Layout";
-import RequestRow from "../../../component/RequestRow";
-import Campaign from "../../../ethereum/campaign";
-import web3 from "../../../ethereum/web3";
-import { Link } from "../../../routes";
+import React, { Component } from 'react';
+import { Button, Table } from 'semantic-ui-react';
+import Layout from '../../../../component/Layout';
+import RequestRow from '../../../../component/RequestRow';
+import Campaign from '../../../../ethereum/campaign';
+import web3 from '../../../../ethereum/web3';
+import { Link } from '../../../../routes';
 
 class RequestIndex extends Component {
   state = {
@@ -66,7 +66,7 @@ class RequestIndex extends Component {
 
     return (
       <Layout>
-        <div style={{ marginTop: "24px" }}>
+        <div style={{ marginTop: '24px' }}>
           <Link route={`/campaigns/${this.props.address}`}>
             <a>Back</a>
           </Link>
@@ -74,10 +74,10 @@ class RequestIndex extends Component {
 
         <div
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "16px"
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: '16px'
           }}
         >
           <h3 style={{ fontSize: 20 }}>Request list</h3>
@@ -86,9 +86,9 @@ class RequestIndex extends Component {
             <Link route={`/campaigns/${this.props.address}/requests/new`}>
               <a>
                 <Button
-                  content="Add Request"
-                  color="purple"
-                  floated="right"
+                  content='Add Request'
+                  color='purple'
+                  floated='right'
                   style={{ marginBottom: 10 }}
                 />
               </a>
@@ -111,8 +111,8 @@ class RequestIndex extends Component {
           <Body>{this.renderRows()}</Body>
         </Table>
         <div>
-          Found {this.props.requestCount}{" "}
-          {this.props.requestCount == 1 ? "request" : "requests"}
+          Found {this.props.requestCount}{' '}
+          {this.props.requestCount == 1 ? 'request' : 'requests'}
         </div>
       </Layout>
     );
